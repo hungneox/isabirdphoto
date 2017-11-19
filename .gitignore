@@ -2,4 +2,3 @@ venv
 .vscode
 .DS_Store
 app.pyc
-static/uploads/*

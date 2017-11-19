@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from __future__ import print_function
 import os
 import numpy as np
@@ -10,7 +11,8 @@ from datetime import datetime
 import hashlib
 import sys
 
-UPLOAD_FOLDER = './static/uploads'
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads')
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__, static_url_path="", static_folder="static")
@@ -70,14 +72,15 @@ def allowed_file(filename):
 
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
+@app.route('/favicon.ico')
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
 
 @app.route('/<filename>', methods=['GET', 'POST'])
 def uploaded_file(filename):
     file_name = app.config['UPLOAD_FOLDER']  + '/' + filename
-    model_file = "models/retrained_animal_graph.pb"
-    label_file = "models/retrained_animal_labels.txt"
+    model_file = os.path.join(app.root_path,"models/retrained_animal_graph.pb")
+    label_file = os.path.join(app.root_path,"models/retrained_animal_labels.txt")
     input_height = 224
     input_width = 224
     input_mean = 128
