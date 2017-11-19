@@ -1,15 +1,16 @@
+from __future__ import print_function
 import os
 import numpy as np
 import tensorflow as tf
 from flask import Flask
-from flask import render_template
-from flask import Flask, request, redirect, url_for
+from flask import request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
+import sys
 
 UPLOAD_FOLDER = './uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="", static_folder="static")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -64,6 +65,11 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
+
 @app.route('/<filename>', methods=['GET', 'POST'])
 def uploaded_file(filename):
     file_name = app.config['UPLOAD_FOLDER']  + '/' + filename
@@ -95,10 +101,15 @@ def uploaded_file(filename):
     top_k = results.argsort()[-5:][::-1]
     labels = load_labels(label_file)
     display_results = []
+    is_a_bird = False
+
+    if (labels[top_k[0]] == 'birds'):
+        is_a_bird = True
+
     for i in top_k:
         display_results.append("%s %s" % (labels[i], results[i]))
 
-    return render_template('index.html', display_results=display_results)
+    return render_template('index.html', is_a_bird=is_a_bird, display_results=display_results)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

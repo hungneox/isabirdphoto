@@ -7,18 +7,32 @@
     <title>Is A Bird Photo</title>
 </head>
 <body>
-    <h1>Is A Bird Photo?</h1>
+    <h1>Is it a bird photo?</h1>
+    <p>Upload your photo to check if whether it is a photo of a bird or not</p>
+    <!-- <img src="img/xkcd-1425.png"> -->
 
     <form method=post enctype=multipart/form-data>
         <p><input type=file name=file>
         <input type=submit value=Upload>
     </form>
-    
-    <ul class=entries>
-        {% for line in display_results %}
-            <li><h2>{{ line }}</h2
-        {% endfor %}
-    </ul>
 
+    {%if is_a_bird == True %}
+        <h2>It is a bird photo</h2>
+    {% elif is_a_bird == False %}
+        <h2>It is not a bird photo</h2>
+    {% endif %}
+
+    {%if display_results %}
+        <h4>Top possibilities:</h3>
+        <ul class=entries>
+            {% for line in display_results %}
+                <li>{{ line }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <footer>
+        Created by <a target="_blank" href="https://github.com/hungneox">Hung Neo</a> 2017 using Tensorflow and Flask
+    </footer>
 </body>
 </html>
