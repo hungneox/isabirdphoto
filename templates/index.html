@@ -5,34 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Is A Bird Photo</title>
+    <link rel="stylesheet" href="/css/bulma.css">
 </head>
 <body>
-    <h1>Is it a bird photo?</h1>
-    <p>Upload your photo to check if whether it is a photo of a bird or not</p>
+    <section class="hero is-info">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">
+                    <h1 class="title">Is it a bird photo?</h1>
+                    <p class="subtitle">Upload your photo to check if whether it is a photo of a bird or not.</p>
+                    <p class="subtitle">Inspired by <a target="_blank" href="https://xkcd.com/1425/">https://xkcd.com/1425/</a></a></p>
+            </div>
+        </div>
+    </section>
     <!-- <img src="img/xkcd-1425.png"> -->
 
-    <form method=post enctype=multipart/form-data>
-        <p><input type=file name=file>
-        <input type=submit value=Upload>
-    </form>
+    <section class="section">
+        <div class="container">
+            <form method="post" enctype="multipart/form-data" action="/">
+                <div class="field">
+                    <label class="label">Photo</label>
+                    <div class="control">
+                        <input class="input" name="file" type="file" placeholder="Your photo">
+                    </div>
+                </div>
+                <div class="control">
+                    <button class="button is-link">Upload</button>
+                </div>
+            </form>
+        </div>
+    </section>
 
-    {%if is_a_bird == True %}
-        <h2>It is a bird photo</h2>
-    {% elif is_a_bird == False %}
-        <h2>It is not a bird photo</h2>
-    {% endif %}
+    <section class="section">
+        <div class="container">
 
-    {%if display_results %}
-        <h4>Top possibilities:</h3>
-        <ul class=entries>
-            {% for line in display_results %}
-                <li>{{ line }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    
-    <footer>
-        Created by <a target="_blank" href="https://github.com/hungneox">Hung Neo</a> 2017 using Tensorflow and Flask
+            {%if is_a_bird == True %}
+            <article class="message is-link">
+                <div class="message-header">
+                    <p>Result</p>
+                    <button class="delete" aria-label="delete"></button>
+                </div>
+                <div class="message-body">
+                    <img src="/uploads/{{ filename }}">
+                    <h1 class="title is-2 is-success">It is a bird photo</h1>
+                </div>
+            </article>
+            {% elif is_a_bird == False %}
+            <article class="message is-danger">
+                <div class="message-header">
+                    <p>Result</p>
+                    <button class="delete" aria-label="delete"></button>
+                </div>
+                <div class="message-body">
+                    <img src="/uploads/{{ filename }}" height="240" width="240">
+                    <h1 class="title is-2 is-danger">It is not a bird photo</h1>
+                </div>
+            </article>
+            {% endif %}
+
+
+            {%if display_results %}
+                <h1 class="title is-3 is-success">Top possibilities:</h1>
+                <table class="table is-bordered is-fullwidth">
+                    {% for line in display_results %}
+                       <tr>
+                            <td>{{ line[0] }}</td>
+                            <td>{{ line[1] }}</td>
+                       </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </section>
+
+    <footer class="footer is-info">
+        <div class="container">
+            <div class="content has-text-centered">
+                <p>
+                    Created by
+                    <a target="_blank" href="https://github.com/hungneox">Hung Neo</a> 2017 using Tensorflow and Flask
+                </p>
+            </div>
+        </div>
     </footer>
 </body>
 </html>

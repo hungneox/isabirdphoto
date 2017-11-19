@@ -2,6 +2,6 @@ venv
 .vscode
 .DS_Store
 app.pyc
-uploads/*.jpg
-uploads/*.png
-uploads/*.gif
+static/uploads/*.jpg
+static/uploads/*.png
+static/uploads/*.gif

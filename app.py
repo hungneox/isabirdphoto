@@ -7,7 +7,7 @@ from flask import request, redirect, url_for, send_from_directory, render_templa
 from werkzeug.utils import secure_filename
 import sys
 
-UPLOAD_FOLDER = './uploads'
+UPLOAD_FOLDER = './static/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__, static_url_path="", static_folder="static")
@@ -107,9 +107,9 @@ def uploaded_file(filename):
         is_a_bird = True
 
     for i in top_k:
-        display_results.append("%s %s" % (labels[i], results[i]))
+        display_results.append([labels[i], results[i]])
 
-    return render_template('index.html', is_a_bird=is_a_bird, display_results=display_results)
+    return render_template('index.html', filename=filename, is_a_bird=is_a_bird, display_results=display_results)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
