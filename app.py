@@ -3,16 +3,19 @@ import os
 import numpy as np
 import tensorflow as tf
 from flask import Flask
+from flask import flash, session
 from flask import request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
+from datetime import datetime
+import hashlib
 import sys
 
 UPLOAD_FOLDER = './static/uploads'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__, static_url_path="", static_folder="static")
+app.secret_key = 'nnWBhKZeg0'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 def load_graph(model_file):
     graph = tf.Graph()
@@ -117,16 +120,17 @@ def index():
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
-            return redirect(request.url)
+            return redirect(url_for('index'))
         file = request.files['file']
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
             flash('No selected file')
-            return redirect(request.url)
+            return redirect(url_for('index'))
         
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            filename = "%s_%s" % (str(datetime.now()), secure_filename(file.filename))
+            filename = hashlib.sha1(filename).hexdigest()
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('uploaded_file',
                                     filename=filename))
@@ -135,4 +139,5 @@ def index():
 
 
 if __name__ == "__main__":
+    app.config['SESSION_TYPE'] = 'filesystem'
     app.run()
