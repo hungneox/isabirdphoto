@@ -1,0 +1,15 @@
+horses
+rabbits
+snakes
+turtles
+elephants
+bears
+tigers
+foxes
+birds
+cats
+deers
+camels
+mice
+dogs
+monkeys
